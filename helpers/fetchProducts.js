@@ -4,9 +4,8 @@ const fetchProducts = async (product) => {
     const response = await fetch(url);
     const responseJson = await response.json();
     return responseJson;
-  }
-  catch (error) {
-    throw new Error('You must provide an url')
+  } catch (error) {
+    throw new Error('You must provide an url');
   }
 };
 
@@ -16,4 +15,4 @@ if (typeof module !== 'undefined') {
   };
 }
 
-//fetchProducts('computador')
+// fetchProducts('computador')
