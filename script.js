@@ -65,7 +65,10 @@ const getIdFromProductItem = (product) => product.querySelector('span.id').inner
  * @returns {Element} Elemento de um item do carrinho.
  */
 const cartItemClickListener = () => {
-
+    const cartList = document.querySelector('.cart__items');
+    const itemOnCart = document.querySelector('.cart__item');
+    cartList.removeChild(itemOnCart);
+    // Ta removendo sempre o primeiro item e não o clicado
 };
 
 const createCartItemElement = ({ id, title, price }) => {
