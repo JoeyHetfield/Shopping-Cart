@@ -6,7 +6,11 @@
  * Função responsável por criar e retornar o elemento de imagem do produto.
  * @param {string} imageSource - URL da imagem.
  * @returns {Element} Elemento de imagem do produto.
+ * 
  */
+
+ const cartList = document.querySelector('.cart__items');
+ 
 const createProductImageElement = (imageSource) => {
   const img = document.createElement('img');
   img.className = 'item__image';
@@ -65,7 +69,6 @@ const getIdFromProductItem = (product) => product.querySelector('span.id').inner
  * @returns {Element} Elemento de um item do carrinho.
  */
 const cartItemClickListener = () => {
-    const cartList = document.querySelector('.cart__items');
     const itemOnCart = document.querySelector('.cart__item');
     cartList.removeChild(itemOnCart);
     // Ta removendo sempre o primeiro item e não o clicado
@@ -93,10 +96,9 @@ const elementsFromProducts = async (product) => {
 // Clique do botão Adicionar ao carrinho
 const addClickOnButton = () => {
   const btn = document.querySelectorAll('.item__add');
-  const listaCarrinho = document.querySelector('.cart__items');
-    btn.forEach((button) => button.addEventListener('click', async () => {
+   btn.forEach((button) => button.addEventListener('click', async () => {
     const returnCarrinho = button.parentNode.firstChild.textContent;
-    listaCarrinho.appendChild(createCartItemElement(await fetchItem(returnCarrinho)));
+    cartList.appendChild(createCartItemElement(await fetchItem(returnCarrinho)));
     }));
 };
 
@@ -107,6 +109,13 @@ const addClickOnButton = () => {
 
 }
  */
+
+// Remover todo carrinho clicando no botão
+
+const removeBtn = document.querySelector('.empty-cart');
+removeBtn.addEventListener('click', () => {
+  cartList.innerHTML = '';
+});
 
 window.onload = async () => {
  await elementsFromProducts('computador');
