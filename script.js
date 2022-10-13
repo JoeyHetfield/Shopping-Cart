@@ -70,7 +70,7 @@ const getIdFromProductItem = (product) => product.querySelector('span.id').inner
  */
 const cartItemClickListener = (event) => {
     const itemOnCart = document.querySelector('.cart__item');
-    event.target.remove(itemOnCart)    
+    event.target.remove(itemOnCart);    
 // Ta removendo sempre o primeiro item e não o clicado
 };
 
@@ -85,12 +85,17 @@ const createCartItemElement = ({ id, title, price }) => {
 // Adicione cada elemento retornado da função createProductItemElement(product) como filho do elemento <section class="items">
 // 
 const elementsFromProducts = async (product) => {
+  const waitElement = document.createElement('p');
+  waitElement.classList.add('loading');
+  waitElement.innerText = 'carregando...';
   const sectionItem = document.querySelector('.items');
+  sectionItem.appendChild(waitElement);
   const objectsFromFecthProducts = await fetchProducts(product);
   const onlyResults = objectsFromFecthProducts.results;
   onlyResults.forEach((obj) => {
     sectionItem.appendChild(createProductItemElement(obj));
    });
+   sectionItem.removeChild(waitElement);
 };
 
 // Clique do botão Adicionar ao carrinho
