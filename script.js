@@ -1,7 +1,6 @@
 // Esse tipo de comentário que estão antes de todas as funções são chamados de JSdoc,
 // experimente passar o mouse sobre o nome das funções e verá que elas possuem descrições! 
 // Fique a vontade para modificar o código já escrito e criar suas próprias funções!
-
 /**
  * Função responsável por criar e retornar o elemento de imagem do produto.
  * @param {string} imageSource - URL da imagem.
@@ -57,7 +56,7 @@ const createProductItemElement = ({ id, title, thumbnail }) => {
  * @param {Element} product - Elemento do produto.
  * @returns {string} ID do produto.
  */
-const getIdFromProductItem = (product) => product.querySelector('span.id').innerText;
+// const getIdFromProductItem = (product) => product.querySelector('span.id').innerText;
 
 /**
  * Função responsável por criar e retornar um item do carrinho.
@@ -70,8 +69,8 @@ const getIdFromProductItem = (product) => product.querySelector('span.id').inner
  */
 const cartItemClickListener = (event) => {
     const itemOnCart = document.querySelector('.cart__item');
-    event.target.remove(itemOnCart);    
-// Ta removendo sempre o primeiro item e não o clicado
+    event.target.remove(itemOnCart);
+  // Ta removendo sempre o primeiro item e não o clicado
 };
 
 const createCartItemElement = ({ id, title, price }) => {
@@ -104,6 +103,7 @@ const addClickOnButton = () => {
    btn.forEach((button) => button.addEventListener('click', async () => {
     const returnCarrinho = button.parentNode.firstChild.textContent;
     cartList.appendChild(createCartItemElement(await fetchItem(returnCarrinho)));
+    saveCartItems(cartList.innerHTML);
     }));
 };
 
@@ -120,11 +120,20 @@ const addClickOnButton = () => {
 const removeBtn = document.querySelector('.empty-cart');
 removeBtn.addEventListener('click', () => {
   cartList.innerHTML = '';
+  localStorage.removeItem('cartItems');
 });
 
 window.onload = async () => {
- await elementsFromProducts('computador');
+  await elementsFromProducts('computador');
   await addClickOnButton();
+ // V Colocar os itens salvos no cart List, fazer a const pra pegar os itens indiv, e colocar o addEvent com cartItemClickListener
+  if (getSavedCartItems()) {
+    cartList.innerHTML = JSON.parse(getSavedCartItems()); 
+    const itemOnCart = document.querySelectorAll('.cart__item');
+    itemOnCart.forEach((item) => item.addEventListener('click', cartItemClickListener));
+    // itemOnCart.addEventListener('click', cartItemClickListener)
+    // cartList.appendChild(createCartItemElement(JSON.parse(getSavedCartItems())))      
+  }
 };
 
 /* const elementsFromProducts = async (product) => {
