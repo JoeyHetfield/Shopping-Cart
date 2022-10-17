@@ -7,9 +7,9 @@
  * @returns {Element} Elemento de imagem do produto.
  * 
  */
-
+  const cartItem = '.cart__item';
  const cartList = document.querySelector('.cart__items');
- 
+
 const createProductImageElement = (imageSource) => {
   const img = document.createElement('img');
   img.className = 'item__image';
@@ -51,6 +51,16 @@ const createProductItemElement = ({ id, title, thumbnail }) => {
   return section;
 };
 
+// Função para salvar o valor total do carrinho
+const totalValue = async () => {
+ const totalCart = document.querySelector('.total-price');
+ let totalSum = 0;
+ document.querySelectorAll(cartItem).forEach((item) => {
+  totalSum += Number(item.innerHTML.split('$')[1]);
+ });
+ totalCart.innerHTML = `Valor Total: ${Math.round((totalSum + Number.EPSILON) * 100) / 100} `;
+};
+
 /**
  * Função que recupera o ID do produto passado como parâmetro.
  * @param {Element} product - Elemento do produto.
@@ -68,9 +78,12 @@ const createProductItemElement = ({ id, title, thumbnail }) => {
  * @returns {Element} Elemento de um item do carrinho.
  */
 const cartItemClickListener = (event) => {
-    const itemOnCart = document.querySelector('.cart__item');
+    itemOnCart = document.querySelector(cartItem);
     event.target.remove(itemOnCart);
-  // Ta removendo sempre o primeiro item e não o clicado
+    localStorage.removeItem('cartItems');
+    totalValue();
+    
+      // Ta removendo sempre o primeiro item e não o clicado
 };
 
 const createCartItemElement = ({ id, title, price }) => {
@@ -104,6 +117,7 @@ const addClickOnButton = () => {
     const returnCarrinho = button.parentNode.firstChild.textContent;
     cartList.appendChild(createCartItemElement(await fetchItem(returnCarrinho)));
     saveCartItems(cartList.innerHTML);
+    totalValue();
     }));
 };
 
@@ -121,19 +135,24 @@ const removeBtn = document.querySelector('.empty-cart');
 removeBtn.addEventListener('click', () => {
   cartList.innerHTML = '';
   localStorage.removeItem('cartItems');
+  totalValue();
 });
 
 window.onload = async () => {
   await elementsFromProducts('computador');
   await addClickOnButton();
+    
  // V Colocar os itens salvos no cart List, fazer a const pra pegar os itens indiv, e colocar o addEvent com cartItemClickListener
   if (getSavedCartItems()) {
     cartList.innerHTML = JSON.parse(getSavedCartItems()); 
-    const itemOnCart = document.querySelectorAll('.cart__item');
+    itemOnCart = document.querySelectorAll('.cart__item');
     itemOnCart.forEach((item) => item.addEventListener('click', cartItemClickListener));
+   
     // itemOnCart.addEventListener('click', cartItemClickListener)
     // cartList.appendChild(createCartItemElement(JSON.parse(getSavedCartItems())))      
   }
+
+  await totalValue();
 };
 
 /* const elementsFromProducts = async (product) => {
