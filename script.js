@@ -58,7 +58,7 @@ const totalValue = async () => {
  document.querySelectorAll(cartItem).forEach((item) => {
   totalSum += Number(item.innerHTML.split('$')[1]);
  });
- totalCart.innerHTML = `Valor Total: ${Math.round((totalSum + Number.EPSILON) * 100) / 100} `;
+ totalCart.innerHTML = `Valor Total: R$ ${Math.round((totalSum + Number.EPSILON) * 100) / 100} `;
 };
 
 /**
